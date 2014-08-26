@@ -3,7 +3,7 @@
 Plugin Name: Visitor Country
 Plugin URI: http://gefri.org/misc/wordpress/visitor-country
 Description: A plugin that retrieves the visitor's country information (using MaxMind's GeoIP local dat file)
-Version: 1.1
+Version: 1.0
 Author: Izhaki
 License: GPLv2 or later
 
