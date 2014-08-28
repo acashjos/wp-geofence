@@ -60,8 +60,8 @@ return "";
 	public function add_meta_box( $post_type ) {
     if ( post_type_supports( $post_type, 'thumbnail' )) {
       add_meta_box(
-        'friendly_territories'
-        ,'Friendly Territories'
+        'wp_geofence'
+        ,'Wp Geofence'
         ,array( $this, 'render_meta_box_content' )
         ,$post_type
         ,'normal'
@@ -132,13 +132,23 @@ return "";
 		// Add an nonce field so we can check for it later.
 		wp_nonce_field( 'wprLoc', 'wprLoc_nonce' );
 ?>
-		<label for="territories"> Enter 3 leter country codes </label> 
+		<div style="background:#f7f7f7;border-radius:5px;padding:5px;color:#444;border:dashed gray 1px;">
+        <ul style="list-style:disc inside none;font-size: smaller;">
+        <li>Enter 3 letter Country code</li>
+        <li>Press ';' to add the country to list. <b>Don't</b> press Enter/Return</li>
+        <li>When you press ';' it will be saved only if its a valid code</li>
+        <li>Type full country name to see hints on country code</li>
+        <li>Eg: type <b>USA</b> then press <b>;</b></li>
+        <li>You may type down <i>united sta..</i> to see the country code for USA</li>
+        </ul>      
+        </div>
+        <label for="territories"> Enter 3 leter country codes </label> 
 		<div id="ter_list" ondblclick="loc_edit(this);"></div>
 		<input type="hidden" id="hidden_loc_list" name="territories" size="25"  value="<?php
 		$terits=get_post_meta($post->ID,"_post_territory");
-		echo implode("; ",$terits).'; ';
+		echo implode("; ",$terits).(count($terits)>0?'; ':'');
 		?>" />
-		<input type="text" id="territories" size="25" onkeypress="check_typed_country(this,event)" />
+		<input type="text" id="territories" size="25" onkeyup ="check_typed_country(this,event)" />
 		<div id="ter_hint" >
 		</div>
 		<script type="text/javascript">
@@ -150,12 +160,11 @@ return "";
 			?>}
 		document.getElementById('ter_list').innerHTML=document.getElementById('hidden_loc_list').value;
 		function check_typed_country(elem,evnt)
-		{
-			var x=String.fromCharCode(evnt.which|evnt.keyCode);
+		{	var x=String.fromCharCode(evnt.which|evnt.keyCode);
 			var hint=document.getElementById('ter_hint');
-			hint.innerHTML="";
+            hint.innerHTML="";
 			var limi=0;
-			var regx=new RegExp('\\b'+elem.value+x, "i")
+			var regx=new RegExp('\\b'+elem.value, "i")
 			for(var b in countries)
 					if( b.match( regx) && limi++<20)
 						hint.innerHTML+=b.replace(regx,'<b>$&</b>')+": "+countries[b]+"<br>";
@@ -165,12 +174,13 @@ return "";
 			if(x==';')
 			{
 			
-				var flag=false;
-				for(var b in countries)
-					if(b==elem.value.toUpperCase())flag=true;
+				var flag=false,inp=elem.value.toUpperCase();
+                inp=inp.replace(";","");
+               for(var b in countries)
+					if(b==inp)flag=true;
 				if(flag==true)
 				{
-					document.getElementById('hidden_loc_list').value=document.getElementById('hidden_loc_list').value+elem.value+"; ";
+					document.getElementById('hidden_loc_list').value=document.getElementById('hidden_loc_list').value+inp+"; ";
 					document.getElementById('ter_list').innerHTML=document.getElementById('hidden_loc_list').value;
 				elem.value="";}
 			}
@@ -201,7 +211,7 @@ var vals=elem.innerHTML.split("; ");
         document.getElementById('territories').value=string; break;
     }
 }
-		</script
+		</script>
 <?php
 }
 
