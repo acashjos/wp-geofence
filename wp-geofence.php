@@ -64,7 +64,7 @@ return "";
         ,'Wp Geofence'
         ,array( $this, 'render_meta_box_content' )
         ,$post_type
-        ,'normal'
+        ,'side'
         ,'default'
       );
     }
@@ -132,16 +132,22 @@ return "";
 		// Add an nonce field so we can check for it later.
 		wp_nonce_field( 'wprLoc', 'wprLoc_nonce' );
 ?>
-		<div style="background:#f7f7f7;border-radius:5px;padding:5px;color:#444;border:dashed gray 1px;">
+		<div id='wpgeoHelp' style="background:#f7f7f7;border-radius:5px;padding:5px;color:#444;border:dashed gray 1px;overflow:hidden;height:50px;">
         <ul style="list-style:disc inside none;font-size: smaller;">
         <li>Enter 3 letter Country code</li>
-        <li>Press ';' to add the country to list. <b>Don't</b> press Enter/Return</li>
+        <li>Press ';' to add the country to Whitelist. <b>Don't</b> press Enter/Return</li>
         <li>When you press ';' it will be saved only if its a valid code</li>
         <li>Type full country name to see hints on country code</li>
         <li>Eg: type <b>USA</b> then press <b>;</b></li>
-        <li>You may type down <i>united sta..</i> to see the country code for USA</li>
+        <li>You may type down "<i>united sta</i>"<b>...</b> to see the country code for USA</li>
+        <lh>Edit/Delete</lh>l
+        <li>Countries in white list is visible above the text field</li>
+        <li>Double click to open it for editing. press ';' after editing</li>
+        <li>If its not saved back using ';' , it will be deleted</li>
         </ul>      
         </div>
+        <b style="color:red;cursor: pointer;font-size: smaller;" onclick="document.getElementById('wpgeoHelp').style.height='auto';">Show More..</b>
+        <br>
         <label for="territories"> Enter 3 leter country codes </label> 
 		<div id="ter_list" ondblclick="loc_edit(this);"></div>
 		<input type="hidden" id="hidden_loc_list" name="territories" size="25"  value="<?php
