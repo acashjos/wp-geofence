@@ -5,7 +5,7 @@ Requires at least: 3.0
 Tested up to: 3.9.1
 Stable tag: 1.0
 License: GPLv2 or later
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=""I DONT HAVE A DONATE LINK YET""
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=AXHLTDJP4W2FE
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 A WordPress plugin to restrict contents selectively based on the geographical location of visitors Times may come when you have to publish some posts specifically to the audiance from a particular country 
