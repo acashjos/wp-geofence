@@ -22,6 +22,24 @@ It uses [MaxMind's GeoIP data file](http://www.maxmind.com/app/geolitecountry), 
 GitHub Repository is [here](https://github.com/acashjos/wp-geofence). 
 
 == Installation ==
+Install and activate the plugin
+= Metabox =
+
+    *	Enter 3 letter Country code
+    *	Press ';' to add the country to Whitelist. Don't press Enter/Return
+    *	When you press ';' it will be saved only if its a valid code
+    *	Type full country name to see hints on country code
+    *		Eg: type USA then press ;
+    *		You may type down "united sta"... to see the country code for USA
+    Edit/Deletel
+    *	Countries in white list is visible above the text field
+    *	Double click to open it for editing. press ';' after editing
+    *	If its not saved back using ';' , it will be deleted
+
+= Short Code =
+* use the short code [local code="country_code"]
+* multiple shortcode sections can be added in a post
+eg: [local code='IND'] .. [/local]
 
 == Changelog ==
 
@@ -38,5 +56,5 @@ A plugin to geofence your posts
 
 
 
-1. Add remote thumbnail url and click publish/update.
-2. After adding a remote thumbnail.
+1. Add countries to white-list using metabox
+2. Use shortcode to restrict only a part of the post.
