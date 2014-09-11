@@ -14,11 +14,11 @@ if ( !defined( 'ABSPATH' ) ) exit;
 ?>
 <?php
 /**
- * Initialize wprLoc on the post edit screen.
+ * Initialize wpGeofence on the post edit screen.
  */
 
 function init_plug() {
-    new wprLoc();
+    new wpGeofence();
 }
 
 if ( is_admin() ) {
@@ -29,26 +29,26 @@ else
 {
 	init_plug();
 }
-class wprLoc {
+class wpGeofence {
 
 private $TERRITORY="PAK";
 private $mIP=null;
 private $countries;
 	/**
-	 * Hook into the appropriate actions when the wprLoc is constructed.
+	 * Hook into the appropriate actions when the wpGeofence is constructed.
 	 */
 	public function __construct() {
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
-		add_action( 'save_post', array( $this, 'save' ) );
-		add_action( 'pre_get_posts', array( $this, 'filter_func' ));
-		add_filter( 'get_previous_post_where', array( $this, 'adj_link_mod') );
-		add_filter( 'get_next_post_where', array( $this, 'adj_link_mod') );
-		$this->LoadVisitorData();
-        add_shortcode( 'local', array(&$this, 'ShortcodeDoer') );
+		add_action( 'add_meta_boxes', array( $this, 'oXwpgf_add_meta_box' ) );
+		add_action( 'save_post', array( $this, 'oXwpgf_save' ) );
+		add_action( 'pre_get_posts', array( $this, 'oXwpgf_filter_func' ));
+		add_filter( 'get_previous_post_where', array( $this, 'oXwpgf_adj_link_mod') );
+		add_filter( 'get_next_post_where', array( $this, 'oXwpgf_adj_link_mod') );
+		$this->oXwpgf_LoadVisitorData();
+        add_shortcode( 'local', array(&$this, 'oXwpgf_ShortcodeDoer') );
         
 	}
 
-    public function ShortcodeDoer($atts,$content="")
+    public function oXwpgf_ShortcodeDoer($atts,$content="")
     {
         if($atts['code']==$this->TERRITORY || $this->TERRITORY=='*')
 return $content;
@@ -57,12 +57,12 @@ return "";
 	/**
 	 * Adds the meta box container.
 	 */
-	public function add_meta_box( $post_type ) {
+	public function oXwpgf_add_meta_box( $post_type ) {
     if ( post_type_supports( $post_type, 'thumbnail' )) {
       add_meta_box(
         'wp_geofence'
         ,'Wp Geofence'
-        ,array( $this, 'render_meta_box_content' )
+        ,array( $this, 'oXwpgf_render_meta_box_content' )
         ,$post_type
         ,'side'
         ,'default'
@@ -73,7 +73,7 @@ return "";
 	/**
 	 * Save the meta when the post is saved.
 	 */
-	public function save( $post_id ) {
+	public function oXwpgf_save( $post_id ) {
 	
 		/*
 		 * We need to verify this came from the our screen and with proper authorization,
@@ -81,13 +81,13 @@ return "";
 		 */
 
 		// Check if our nonce is set.
-		if ( ! isset( $_POST['wprLoc_nonce'] ) )
+		if ( ! isset( $_POST['wpGeofence_nonce'] ) )
 			return $post_id;
 
-		$nonce = $_POST['wprLoc_nonce'];
+		$nonce = $_POST['wpGeofence_nonce'];
 
 		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $nonce, 'wprLoc' ) )
+		if ( ! wp_verify_nonce( $nonce, 'wpGeofence' ) )
 			return $post_id;
 
 		// If this is an autosave, our form has not been submitted,
@@ -127,10 +127,10 @@ return "";
 	/**
 	 * Render Meta Box content.
 	 */
-	public function render_meta_box_content( $post ) {
+	public function oXwpgf_render_meta_box_content( $post ) {
 	
 		// Add an nonce field so we can check for it later.
-		wp_nonce_field( 'wprLoc', 'wprLoc_nonce' );
+		wp_nonce_field( 'wpGeofence', 'wpGeofence_nonce' );
 ?>
 		<div id='wpgeoHelp' style="background:#f7f7f7;border-radius:5px;padding:5px;color:#444;border:dashed gray 1px;overflow:hidden;height:50px;">
         <ul style="list-style:disc inside none;font-size: smaller;">
@@ -149,12 +149,12 @@ return "";
         <b style="color:red;cursor: pointer;font-size: smaller;" onclick="document.getElementById('wpgeoHelp').style.height='auto';">Show More..</b>
         <br>
         <label for="territories"> Enter 3 leter country codes </label> 
-		<div id="ter_list" ondblclick="loc_edit(this);"></div>
+		<div id="ter_list" ondblclick="oXwpgf_loc_edit(this);"></div>
 		<input type="hidden" id="hidden_loc_list" name="territories" size="25"  value="<?php
 		$terits=get_post_meta($post->ID,"_post_territory");
 		echo implode("; ",$terits).(count($terits)>0?'; ':'');
 		?>" />
-		<input type="text" id="territories" size="25" onkeyup ="check_typed_country(this,event)" />
+		<input type="text" id="territories" size="25" onkeyup ="oXwpgf_check_typed_country(this,event)" />
 		<div id="ter_hint" >
 		</div>
 		<script type="text/javascript">
@@ -165,7 +165,7 @@ return "";
 			}
 			?>}
 		document.getElementById('ter_list').innerHTML=document.getElementById('hidden_loc_list').value;
-		function check_typed_country(elem,evnt)
+		function oXwpgf_check_typed_country(elem,evnt)
 		{	var x=String.fromCharCode(evnt.which|evnt.keyCode);
 			var hint=document.getElementById('ter_hint');
             hint.innerHTML="";
@@ -192,7 +192,7 @@ return "";
 			}
 			return false;
 		}
-		function loc_edit (elem) {
+		function oXwpgf_loc_edit (elem) {
 			var string="";
 if (window.getSelection) {  // all browsers, except IE before version 9
     var range = window.getSelection ();
@@ -221,7 +221,7 @@ var vals=elem.innerHTML.split("; ");
 <?php
 }
 
-function filter_func( $query ) {
+function oXwpgf_filter_func( $query ) {
     // Make sure this only runs on the main query on the main query
   if (  !is_admin() && $this->TERRITORY!='*') {//$query->is_main_query() &&
 
@@ -244,7 +244,7 @@ function filter_func( $query ) {
     }
 
 }
-function adj_link_mod( $where ) {
+function oXwpgf_adj_link_mod( $where ) {
     global $wpdb;
     if($this->TERRITORY!='*')
      $where .= " AND  ( EXISTS  ( 
@@ -257,7 +257,7 @@ function adj_link_mod( $where ) {
 return $where;
 }
 
- function LoadVisitorData()
+ function oXwpgf_LoadVisitorData()
     {
         // Get the path of the plugin
         $mPluginDir = plugin_dir_path( __FILE__ );
